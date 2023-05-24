@@ -19,9 +19,15 @@ def guess_gender(name):
         "name": name
     }
     response = requests.get(url="https://api.genderize.io/", params=parameter)
-    data = response.json()
-    gender = data["gender"]
+    gender = response.json()["gender"]
     return render_template("guess.html", my_name=name, guess=gender)
+
+
+@app.route("/blog")
+def blog():
+    response = requests.get(url="https://www.npoint.io/docs/c790b4d5cab58020d391")
+    data = response.json()
+    return render_template("blog.html", posts=data)
 
 
 if __name__ == "__main__":
