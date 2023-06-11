@@ -15,7 +15,7 @@ with smtplib.SMTP(host="smtp.gmail.com") as connection:
     connection.login(user=MY_EMAIL, password=PASSWORD)
     if now.weekday() == 0:
         connection.sendmail(from_addr=MY_EMAIL,
-                            to_addrs="linhlucasta2003@gmail.com",
+                            to_addrs="minh.nq214010@sis.hust.edu.vn",
                             msg=f"Subject: Monday Motivation\n\n {random.choice(motivation_quotes)} ")
 
 
