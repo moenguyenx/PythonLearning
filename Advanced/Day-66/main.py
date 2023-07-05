@@ -4,6 +4,7 @@ import random
 
 app = Flask(__name__)
 
+APIKEY = "vailonluondaucatmoi"
 ##Connect to Database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cafes.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -88,8 +89,30 @@ def add():
 
 
 # HTTP PUT/PATCH - Update Record
+@app.route('/update-price/<int:cafe_id>', methods=['PATCH'])
+def update_price(cafe_id):
+    new_price = request.args.get('new_price')
+    update_cafe = db.session.query(Cafe).get(cafe_id)
+    if update_cafe:
+        update_cafe.coffee_price = new_price
+        db.session.commit()
+        return jsonify(success='Successfully updated the price'), 200
+    else:
+
+        return jsonify(error={'Not found': "Sorry a cafe with that id cannot be found!"}), 404
+
 
 # HTTP DELETE - Delete Record
+@app.route('/report-closed/<int:cafe_id>', methods=['DELETE'])
+def delete_cafe(cafe_id):
+    required_api_key = request.args.get('api-key')
+    if required_api_key == APIKEY:
+        closed_cafe = db.session.query(Cafe).get(cafe_id)
+        db.session.delete(closed_cafe)
+        db.session.commit()
+        return jsonify(success="Successfully deleted"), 200
+    else:
+        return jsonify(error="Sorry, you're not allowed to do that"), 403
 
 
 if __name__ == '__main__':
